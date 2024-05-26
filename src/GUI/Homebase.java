@@ -31,6 +31,7 @@ public class Homebase {
 
     public Homebase(JFrame frame) {
         // frame.setLayout(new BorderLayout());
+        frame.getContentPane().removeAll();
 
         frame.setLocationRelativeTo(null); // Center the frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,7 +75,7 @@ public class Homebase {
 
     private void loadSplashImage() {
         try {
-            File imgFile = new File("src/resource/homebase.jpg");
+            File imgFile = new File("src/resources/images/homebase.jpg");
             if (imgFile.exists()) {
                 splashImage = ImageIO.read(imgFile);
             } else {
@@ -118,17 +119,14 @@ public class Homebase {
                 new Dimension(120, 35));
 
         monsterButton.addActionListener(e -> {
-            frame.getContentPane().removeAll();
             new MonsterSelection(frame, "Homebase");
         });
 
         dungeonButton.addActionListener(e -> {
-            frame.getContentPane().removeAll();
-            new Dungeon(frame);
+            new DungeonGUI(frame);
         });
 
         itemButton.addActionListener(e -> {
-            frame.getContentPane().removeAll();
             new ItemSelection(frame, "Homebase");
         });
 
@@ -137,7 +135,6 @@ public class Homebase {
         });
 
         gameDataButton.addActionListener(e -> {
-            frame.getContentPane().removeAll();
             new GameData(frame);
         });
 

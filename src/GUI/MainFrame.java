@@ -43,7 +43,7 @@ public class MainFrame extends JFrame {
 
         // Load the image
         try {
-            File imgFile = new File("src/resource/mainmenu.jpg");
+            File imgFile = new File("src/resources/images/mainmenu.jpg");
             if (imgFile.exists()) {
                 splashImage = ImageIO.read(imgFile);
             } else {
@@ -201,12 +201,5 @@ public class MainFrame extends JFrame {
         button.setBackground(new Color(64, 69, 19)); // Set background color to brown
         button.setForeground(new Color(255, 255, 0)); // Set text color to white
         return button;
-    }
-
-    public static void main(String[] args) {
-        // Create and show the splash screen
-        frame = new JFrame();
-        MainFrame splashScreen = new MainFrame(frame);
-        splashScreen.setVisible(true);
     }
 }

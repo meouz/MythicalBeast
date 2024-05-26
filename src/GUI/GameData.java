@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,14 +14,17 @@ import java.io.PrintWriter;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 public class GameData {
     JButton saveButton1, saveButton2, saveButton3, loadButton1, loadButton2, loadButton3, backButton;
-
+    
     public GameData(JFrame frame) {
+        frame.getContentPane().removeAll();
+        frame.getContentPane().repaint();
+        frame.getContentPane().setBackground(Color.BLACK);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setLayout(new BorderLayout());
 
         // Create the buttons
         saveButton1 = createSaveButton("Save Game 1");
@@ -60,7 +64,6 @@ public class GameData {
         frame.add(backButton);
 
         // Set background color
-        frame.getContentPane().setBackground(Color.BLACK);
 
         // Set button background color
         saveButton1.setBackground(Color.WHITE);
@@ -71,9 +74,11 @@ public class GameData {
         loadButton3.setBackground(Color.WHITE);
         backButton.setBackground(Color.WHITE);
 
-        backButton.addActionListener(e -> {
-            frame.getContentPane().removeAll();
-            new Homebase(frame);
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Homebase(frame);
+            }
         });
     }
 
@@ -103,7 +108,7 @@ public class GameData {
         String fileName = gameName + ".txt";
         try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(fileName)))) {
             out.println("Game data for " + gameName);
-            JOptionPane.showMessageDialog(this, "Game saved to " + fileName);
+            JOptionPane.showInputDialog(this, "Game saved to " + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -113,10 +118,10 @@ public class GameData {
         String fileName = gameName + ".txt";
         try (BufferedReader in = new BufferedReader(new FileReader(fileName))) {
             String gameData = in.readLine();
-            JOptionPane.showMessageDialog(this, "Loaded data: " + gameData);
+            JOptionPane.showInputDialog(this, "Loaded data: " + gameData);
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to load game: " + fileName);
+            JOptionPane.showInputDialog(this, "Failed to load game: " + fileName);
         }
     }
 }

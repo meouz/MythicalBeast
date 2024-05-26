@@ -1,15 +1,14 @@
-package Model.Element;
+package Model.element;
 
-import Model.Monster;
+import Model.entity.Monster;
 
 public abstract class Element {
     private int elementDmg;
 
-    Element() {
-
+    public Element() {
     }
 
-    Element(int elementDmg) {
+    protected Element(int elementDmg) {
         this.elementDmg = elementDmg;
     }
 

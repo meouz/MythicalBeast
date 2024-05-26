@@ -17,15 +17,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import GUIDummy.DungeonDummy;
-
 public class ItemSelection {
     public JFrame jframe;
-    private String current;
 
     public ItemSelection(JFrame frame, String current) {
-        this.current = current;
-        System.out.println(current);
+        frame.getContentPane().removeAll();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLayout(new BorderLayout());
@@ -39,9 +35,9 @@ public class ItemSelection {
         mainPanel.setLayout(new GridLayout(1, 3, 100, 10));
         // mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 100, 30));
 
-        mainPanel.add(createMonsterPanel("Monster 1", "src/resource/monster1.jpg")); // Ganti dengan path gambar monster
-        mainPanel.add(createMonsterPanel("Monster 2", "src/resource/monster2.jpg"));
-        mainPanel.add(createMonsterPanel("Monster 3", "src/resource/monster3.jpg"));
+        mainPanel.add(createMonsterPanel("Monster 1", "src/resources/images/monsterAir.jpg")); // Ganti dengan path gambar monster
+        mainPanel.add(createMonsterPanel("Monster 2", "src/resources/images/monsterApi.jpg"));
+        mainPanel.add(createMonsterPanel("Monster 3", "src/resources/images/monsterAngin.jpg"));
 
         JPanel backPanel = new JPanel(new BorderLayout());
         backPanel.setBorder(BorderFactory.createEmptyBorder(100, 580, 0, 580));
@@ -70,7 +66,7 @@ public class ItemSelection {
                         new Homebase(frame);
                         break;
                     case "Dungeon":
-                        new Dungeon(frame);
+                        new DungeonGUI(frame);
                         break;
                     case "BattleGUI":
                         new BattleGUI(frame);

@@ -17,10 +17,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import Model.Main;
+import Model.entity.Player;
+import Model.homebase.HomeBase;
+
 public class MonsterSelection {
     public JFrame jframe;
+    private String current;
+    public static Player player = Main.player;
+    private JButton trainButton, evolveButton, reviveButton, mainMonsterButton;
 
     public MonsterSelection(JFrame frame, String current) {
+        this.current = current;
+        frame.getContentPane().removeAll();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLayout(new BorderLayout());
@@ -34,9 +43,20 @@ public class MonsterSelection {
         mainPanel.setLayout(new GridLayout(1, 3, 100, 10));
         // mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 100, 30));
 
-        mainPanel.add(createMonsterPanel("Monster 1", "src/resource/monster1.jpg")); // Ganti dengan path gambar monster
-        mainPanel.add(createMonsterPanel("Monster 2", "src/resource/monster2.jpg"));
-        mainPanel.add(createMonsterPanel("Monster 3", "src/resource/monster3.jpg"));
+        for (int i = 0; i < player.getMonsterSize(); i++) {
+            JPanel createMonsterJPanel = createMonsterPanel("Monster 1", player.getMonsters()[i].getImage(), i);
+            mainPanel.add(createMonsterJPanel); // Ganti dengan path gambar monster
+        }
+
+        // JPanel createMonsterJPanel = createMonsterPanel("Monster 1",
+        // player.getMonsters()[0].getImage(), 0);
+        // JPanel createMonsterJPanel = createMonsterPanel("Monster 1",
+        // player.getMonsters()[0].getImage(), 0);
+
+        // mainPanel.add(createMonsterPanel("Monster 2",
+        // "src/resources/images/monsterAngin.jpg",1));
+        // mainPanel.add(createMonsterPanel("Monster 3",
+        // "src/resources/images/monsterAir.jpg",2));
 
         JPanel backPanel = new JPanel(new BorderLayout());
         backPanel.setBorder(BorderFactory.createEmptyBorder(100, 580, 0, 580));
@@ -55,9 +75,6 @@ public class MonsterSelection {
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Create a new instance of SplashScreenDemo
-                frame.getContentPane().removeAll();
-                ;
-                frame.getContentPane().repaint();
                 // monsterPanel.removeAll();
                 // monsterPanel.repaint();
                 switch (current) {
@@ -65,7 +82,7 @@ public class MonsterSelection {
                         new Homebase(frame);
                         break;
                     case "Dungeon":
-                        new Dungeon(frame);
+                        new DungeonGUI(frame);
                         break;
                     case "BattleGUI":
                         new BattleGUI(frame);
@@ -77,12 +94,9 @@ public class MonsterSelection {
         });
     }
 
-    private JPanel createMonsterPanel(String monsterName, String imagePath) {
+    private JPanel createMonsterPanel(String monsterName, String imagePath, int index) {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-
-        JButton reviveButton = createButton("Revive");
-        panel.add(reviveButton, BorderLayout.NORTH);
 
         JLabel monsterImage;
         if (imagePath != null) {
@@ -106,10 +120,48 @@ public class MonsterSelection {
         JButton statButton = createButton("Stats");
         JButton mainButton = createButton("Main");
 
-        buttonPanel.add(createButton("Train"));
+        if (index == 0) {
+            mainMonsterButton = new JButton("<html>Main<br>Monster</html>");
+            mainMonsterButton.setBackground(new Color(64, 69, 19)); // Set background color to brown
+            mainMonsterButton.setForeground(new Color(255, 255, 0));
+            mainMonsterButton.setEnabled(false);
+            buttonPanel.add(mainMonsterButton);
+        }
+
+        if (current.equalsIgnoreCase("homebase") & player.getMonsters()[index].getHp() <= 0) {
+            reviveButton = createButton("Revive");
+            panel.add(reviveButton, BorderLayout.NORTH);
+            
+            reviveButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    HomeBase home = new HomeBase();
+                    home.revive(player.getMonsters()[index]);
+                    new MonsterSelection(jframe, current);
+                }
+            });
+        }
+
+        if (current.equalsIgnoreCase("homebase")) {
+            trainButton = createButton("Train");
+            evolveButton = createButton("Evolve");
+            buttonPanel.add(trainButton);
+            buttonPanel.add(evolveButton);
+
+            trainButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    showTrainDetail(jframe, index);
+                }
+            });
+    
+            evolveButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    showEvolveDetail(jframe, index);
+                    new MonsterSelection(jframe, current);
+                }
+            });
+        }
         buttonPanel.add(statButton);
         buttonPanel.add(mainButton);
-        buttonPanel.add(createButton("Evolve"));
 
         buttonPanel.setBackground(new Color(64, 69, 19)); // Set background color to brown
         buttonPanel.setForeground(new Color(255, 255, 0)); // Set text color to white
@@ -119,8 +171,8 @@ public class MonsterSelection {
         statButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Create a new instance of SplashScreenDemo
-                showStats(jframe);
-                
+                showStats(jframe, index);
+
                 // String monsterStat = "HP: 100\n";
                 // monsterStat += "Level: 1";
                 // JOptionPane.showConfirmDialog(jframe, monsterStat, "Monster Status",
@@ -128,26 +180,71 @@ public class MonsterSelection {
             }
         });
 
+        mainButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                player.changeMonster(index);
+                new MonsterSelection(jframe, current);
+            }
+        });
+
+        
+
+
+
         return panel;
     }
 
     private JButton createButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Arial", Font.BOLD, 18));
-        // button.setPreferredSize(new Dimension(200, 50)); // Set preferred size to
-        // ensure uniform size
         button.setBackground(new Color(64, 69, 19)); // Set background color to brown
         button.setForeground(new Color(255, 255, 0)); // Set text color to white
         return button;
     }
 
-    private static void showStats(JFrame frame) {
-        ImageIcon icon = new ImageIcon("src/resource/monster1.jpg"); // Ganti dengan path ikon Anda
-        JLabel label = new JLabel("HP: 100\nLevel: 1");
-        label.setIcon(icon);
-        JOptionPane.showConfirmDialog(frame, new Object[] { "HP: 100", "Level: 1" }, "Exit Option",
+    private static void showStats(JFrame frame, int index) {
+        JLabel label = new JLabel(player.getMonsters()[index].getMonsterDetail());
+        JOptionPane.showConfirmDialog(frame, new Object[] { label }, "Monster Status",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
-        // Tambahkan logika tambahan di sini berdasarkan respons pengguna (result)
+    }
+
+    private static void showTrainDetail(JFrame frame, int index) {
+        JLabel label = new JLabel("<html>EP: " + player.getEp() + "<br>EP yang dibutuhkan:"
+                + player.getMonsters()[index].getMaxEP() + "</html>");
+        int result = JOptionPane.showConfirmDialog(frame, new Object[] { label }, "Train Monster",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        if (result == JOptionPane.YES_OPTION) {
+            player.getMonsters()[index].levelUp();
+        }
+    }
+
+    private static void showEvolveDetail(JFrame frame, int index) {
+        String message = "<html>Element: " + player.getMonsters()[index].getElement().getClass().getSimpleName() + "</html>";
+        // int result = showCustomButtonDialog("Custom Button Dialog", "Do you want to
+        // proceed?", "Yes", "No", "Cancel");
+        HomeBase home = new HomeBase();
+        String option = home.getElementEvolve(player.getMonsters()[index]) + "-Cancel";
+        String[] options = option.split("-");
+        int result = showCustomButtonDialog("Evolve Monster", message, options);
+
+        // Display the result
+        if (result == JOptionPane.YES_OPTION) {
+            home.evolve(player.getMonsters()[index], 1);
+        } else if (result == JOptionPane.NO_OPTION) {
+            home.evolve(player.getMonsters()[index], 2);
+        }
+    }
+
+    public static int showCustomButtonDialog(String title, String message, String... options) {
+        return JOptionPane.showOptionDialog(
+                null, // Use default parent component
+                message,
+                title,
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null, // Use default icon
+                options, // Custom button text
+                options[0]); // Default selection
     }
 
 }

@@ -7,6 +7,7 @@ import java.awt.event.*;
 public class MainMenu {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Main Menu");
+        frame.getContentPane().removeAll();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);

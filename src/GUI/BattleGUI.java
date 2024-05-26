@@ -3,6 +3,9 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.Color;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -10,15 +13,32 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
+import Model.Main;
+import Model.dungeon.Arena;
+import Model.entity.Monster;
+import Model.entity.Player;
+import Model.dungeon.Dungeon;
+
 public class BattleGUI {
+    private static Player player = Main.player;
+    private static Dungeon dungeon = new Dungeon();
+    private static Monster enemy = dungeon.genMonster();
+    private Arena arena = new Arena();
+    private JLabel playerHPLabel, enemyHPLabel;
+    private JFrame frame;
 
     public BattleGUI(JFrame frame) {
+        frame.getContentPane().removeAll();
+        this.frame = frame;
         frame.setLocationRelativeTo(null);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        if (enemy.getHp() <= 0) {
+            enemy = dungeon.genMonster();
+        }
 
         // Top buttons panel
         JPanel topPanel = new JPanel(new BorderLayout());
@@ -33,12 +53,14 @@ public class BattleGUI {
         // Center area with player, VS label, and enemy
         JPanel centerPanel = new JPanel(new GridLayout(1, 3, 10, 0));
 
+        // Generate enemy monster
+
         // Player panel
         JPanel playerPanel = new JPanel(new BorderLayout());
         JLabel playerLabel = new JLabel("Player", SwingConstants.CENTER);
         playerLabel.setVerticalAlignment(SwingConstants.TOP);
-        JLabel playerImageLabel = new JLabel(new ImageIcon("src/resource/monster2.jpg"));
-        JLabel playerHPLabel = new JLabel("HP: 100 / 100", SwingConstants.CENTER);
+        JLabel playerImageLabel = new JLabel(new ImageIcon(player.getMonsters()[0].getImage()));
+        playerHPLabel = new JLabel("HP: " + player.getMonsters()[0].getHp() + "/" + player.getMonsters()[0].getMaxHP(), SwingConstants.CENTER);
 
         playerPanel.add(playerLabel, BorderLayout.NORTH);
         playerPanel.add(playerImageLabel, BorderLayout.CENTER);
@@ -53,8 +75,8 @@ public class BattleGUI {
         JPanel enemyPanel = new JPanel(new BorderLayout());
         JLabel enemyLabel = new JLabel("Enemy", SwingConstants.CENTER);
         enemyLabel.setVerticalAlignment(SwingConstants.TOP);
-        JLabel enemyImageLabel = new JLabel(new ImageIcon("src/resource/monster1.jpg"));
-        JLabel enemyHPLabel = new JLabel("HP: 100 / 100", SwingConstants.CENTER);
+        JLabel enemyImageLabel = new JLabel(new ImageIcon(enemy.getImage()));
+        enemyHPLabel = new JLabel("HP: " + enemy.getHp() + "/" + enemy.getMaxHP(), SwingConstants.CENTER);
 
         enemyPanel.add(enemyLabel, BorderLayout.NORTH);
         enemyPanel.add(enemyImageLabel, BorderLayout.CENTER);
@@ -79,10 +101,7 @@ public class BattleGUI {
 
         // Enemy actions
         JPanel enemyActionsPanel = new JPanel(new BorderLayout());
-        JTextArea enemyTextArea = new JTextArea(5, 20);
-        enemyTextArea.setText("TEXTTEXTTEXTTEXTTEXT");
-        enemyTextArea.setLineWrap(true);
-        enemyTextArea.setWrapStyleWord(true);
+        JLabel enemyTextArea = new JLabel("Enter Battle");
         JScrollPane enemyScrollPane = new JScrollPane(enemyTextArea);
         JButton catchEnemyButton = new JButton("Catch Enemy");
 
@@ -97,7 +116,81 @@ public class BattleGUI {
         frame.add(topPanel, BorderLayout.NORTH);
         frame.add(centerPanel, BorderLayout.CENTER);
         frame.add(bottomPanel, BorderLayout.SOUTH);
+        enemyScrollPane.setBackground(Color.magenta);
+
+        catchEnemyButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (arena.catchMonster(player, enemy)) {
+                    new DungeonGUI(frame);
+                }
+                ;
+            }
+        });
+
+        basicAttackButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                player.getMonsters()[0].basicAttack(enemy);
+                updateGUI(player.getMonsters()[0], enemy);
+            }
+        });
+
+        specialAttackButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                player.getMonsters()[0].specialAttack(enemy);
+                updateGUI(player.getMonsters()[0], enemy);
+            }
+        });
+
+        elementAttackButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                player.getMonsters()[0].elementAttack(enemy);
+                updateGUI(player.getMonsters()[0], enemy);
+            }
+        });
+
+        monsterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new MonsterSelection(frame, "BattleGUI");
+            }
+        });
+
+        runButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Arena arena = new Arena();
+                boolean run = arena.run(player.getMonsters()[0], enemy);
+                if (run) {
+                    new DungeonGUI(frame);
+                }
+            }
+        });
 
         frame.setVisible(true);
+    }
+
+    public void updateGUI(Monster player, Monster enemy) {
+        enemyHPLabel.setText("HP: " + enemy.getHp() + "/" + enemy.getMaxHP());
+        if (!enemy.isAlive()) {
+            BattleGUI.player.setEp(BattleGUI.player.getEp() + 100);
+            new DungeonGUI(frame);
+        }
+        enemyAction();
+        if (!player.isAlive()) {
+            // new DungeonGUI(frame);
+        }
+        playerHPLabel.setText("HP: " + player.getHp() + "/" + player.getMaxHP());
+    }
+
+    public void enemyAction() {
+        switch ((int) (Math.random() * 3) + 1) {
+            case 1:
+                enemy.basicAttack(player.getMonsters()[0]);
+                break;
+            case 2:
+                enemy.specialAttack(player.getMonsters()[0]);
+                break;
+            case 3:
+                enemy.elementAttack(player.getMonsters()[0]);
+                break;
+        }
     }
 }

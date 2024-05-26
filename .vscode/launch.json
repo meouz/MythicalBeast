@@ -6,6 +6,48 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainFrame",
+            "request": "launch",
+            "mainClass": "GUI.MainFrame",
+            "projectName": "MythicalBeast_c2ebb218"
+        },
+        {
+            "type": "java",
+            "name": "Battle",
+            "request": "launch",
+            "mainClass": "GUI.Battle",
+            "projectName": "MythicalBeast_c2ebb218"
+        },
+        {
+            "type": "java",
+            "name": "MenuScreen",
+            "request": "launch",
+            "mainClass": "GUI.MenuScreen",
+            "projectName": "MythicalBeast_c2ebb218"
+        },
+        {
+            "type": "java",
+            "name": "MainMenu",
+            "request": "launch",
+            "mainClass": "GUI.MainMenu",
+            "projectName": "MythicalBeast_c2ebb218"
+        },
+        {
+            "type": "java",
+            "name": "Homebase",
+            "request": "launch",
+            "mainClass": "GUI.Homebase",
+            "projectName": "MythicalBeast_c2ebb218"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Model.Main",
+            "projectName": "MythicalBeast_c2ebb218"
+        },
+        {
+            "type": "java",
             "name": "Backpack",
             "request": "launch",
             "mainClass": "Model.Backpack",
