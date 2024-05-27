@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,6 +10,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class DungeonGUI {
+    private static JTextArea textArea;
+
     public DungeonGUI(JFrame frame) {
         // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -34,8 +37,12 @@ public class DungeonGUI {
         bottomPanel.add(exploreButton, BorderLayout.CENTER);
 
         // Create the text area
-        JTextArea textArea = new JTextArea();
-        textArea.setText("TEXT\n".repeat(25)); // Dummy text to fill the area
+        if (textArea == null) {
+            Font font = new Font("Arial", Font.PLAIN, 30);
+            textArea = new JTextArea();
+            textArea.setFont(font);
+            textArea.setText("Anda memasuki Dungeon");
+        }
         textArea.setEditable(false);
 
         // Add components to the main panel
@@ -55,6 +62,7 @@ public class DungeonGUI {
         homeBaseButton.addActionListener(e -> {
             frame.getContentPane().removeAll();
             new Homebase(frame);
+            textArea = null;
         });
 
         itemButton.addActionListener(e -> {
@@ -63,9 +71,13 @@ public class DungeonGUI {
         });
 
         exploreButton.addActionListener(e -> {
+            textArea.setText(textArea.getText() + "\nExploring...");
             if (Math.random() < 0.5) {
+                textArea.setText(textArea.getText() + "\nAnda menemukan Musuh");
                 frame.getContentPane().removeAll();
                 new BattleGUI(frame);
+            } else {
+                textArea.setText(textArea.getText() + "\nAnda tidak menemukan Musuh");
             }
         });
     }

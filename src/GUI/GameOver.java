@@ -4,15 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GameOver {
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(GameOver::createAndShowGUI);
-    }
-
-    private static void createAndShowGUI() {
-        JFrame frame = new JFrame("Game Over");
+    public GameOver(JFrame frame) {
+        frame.getContentPane().removeAll();
+        frame.setLocationRelativeTo(null);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
-        frame.setResizable(false);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

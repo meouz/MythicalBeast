@@ -44,7 +44,7 @@ public class MonsterSelection {
         // mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 100, 30));
 
         for (int i = 0; i < player.getMonsterSize(); i++) {
-            JPanel createMonsterJPanel = createMonsterPanel("Monster 1", player.getMonsters()[i].getImage(), i);
+            JPanel createMonsterJPanel = createMonsterPanel("Monster", player.getMonsters()[i].getImage(), i);
             mainPanel.add(createMonsterJPanel); // Ganti dengan path gambar monster
         }
 
@@ -85,7 +85,9 @@ public class MonsterSelection {
                         new DungeonGUI(frame);
                         break;
                     case "BattleGUI":
-                        new BattleGUI(frame);
+                        if (player.getMonsters()[0].isAlive()) {
+                            new BattleGUI(frame);
+                        }
                         break;
                     default:
                         break;
@@ -111,9 +113,9 @@ public class MonsterSelection {
         }
         panel.add(monsterImage, BorderLayout.CENTER);
 
-        JLabel statsLabel = new JLabel("Stats (Nama, Level, HP, Element, EP)", SwingConstants.CENTER);
-        statsLabel.setForeground(Color.WHITE);
-        panel.add(statsLabel, BorderLayout.SOUTH);
+        // JLabel statsLabel = new JLabel("Stats (Nama, Level, HP, Element, EP)", SwingConstants.CENTER);
+        // statsLabel.setForeground(Color.WHITE);
+        // panel.add(statsLabel, BorderLayout.SOUTH);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 4));
@@ -131,7 +133,7 @@ public class MonsterSelection {
         if (current.equalsIgnoreCase("homebase") & player.getMonsters()[index].getHp() <= 0) {
             reviveButton = createButton("Revive");
             panel.add(reviveButton, BorderLayout.NORTH);
-            
+
             reviveButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     HomeBase home = new HomeBase();
@@ -152,7 +154,7 @@ public class MonsterSelection {
                     showTrainDetail(jframe, index);
                 }
             });
-    
+
             evolveButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     showEvolveDetail(jframe, index);
@@ -187,10 +189,6 @@ public class MonsterSelection {
             }
         });
 
-        
-
-
-
         return panel;
     }
 
@@ -213,8 +211,9 @@ public class MonsterSelection {
                 + player.getMonsters()[index].getMaxEP() + "</html>");
         int result = JOptionPane.showConfirmDialog(frame, new Object[] { label }, "Train Monster",
                 JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-        if (result == JOptionPane.YES_OPTION) {
+        if (result == JOptionPane.YES_OPTION && player.getEp() >= player.getMonsters()[index].getMaxEP()) {
             player.getMonsters()[index].levelUp();
+            player.setEp(player.getEp() - player.getMonsters()[index].getMaxEP());
         }
     }
 

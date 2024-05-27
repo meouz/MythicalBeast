@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -13,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 import Model.Main;
@@ -28,6 +30,7 @@ public class BattleGUI {
     private Arena arena = new Arena();
     private JLabel playerHPLabel, enemyHPLabel;
     private JFrame frame;
+    private static JTextArea textArea;
 
     public BattleGUI(JFrame frame) {
         frame.getContentPane().removeAll();
@@ -38,6 +41,9 @@ public class BattleGUI {
 
         if (enemy.getHp() <= 0) {
             enemy = dungeon.genMonster();
+        }
+        if (!player.getMonsters()[0].isAlive()) {
+            new MonsterSelection(frame, "BattleGUI");
         }
 
         // Top buttons panel
@@ -60,7 +66,8 @@ public class BattleGUI {
         JLabel playerLabel = new JLabel("Player", SwingConstants.CENTER);
         playerLabel.setVerticalAlignment(SwingConstants.TOP);
         JLabel playerImageLabel = new JLabel(new ImageIcon(player.getMonsters()[0].getImage()));
-        playerHPLabel = new JLabel("HP: " + player.getMonsters()[0].getHp() + "/" + player.getMonsters()[0].getMaxHP(), SwingConstants.CENTER);
+        playerHPLabel = new JLabel("HP: " + player.getMonsters()[0].getHp() + "/" + player.getMonsters()[0].getMaxHP(),
+                SwingConstants.CENTER);
 
         playerPanel.add(playerLabel, BorderLayout.NORTH);
         playerPanel.add(playerImageLabel, BorderLayout.CENTER);
@@ -101,8 +108,17 @@ public class BattleGUI {
 
         // Enemy actions
         JPanel enemyActionsPanel = new JPanel(new BorderLayout());
-        JLabel enemyTextArea = new JLabel("Enter Battle");
-        JScrollPane enemyScrollPane = new JScrollPane(enemyTextArea);
+        if (textArea == null) {
+            Font font = new Font("Arial", Font.PLAIN, 15);
+            textArea = new JTextArea();
+            textArea.setFont(font);
+            textArea.setEditable(false);
+            textArea.setText("Memasuki Pertarungan");
+        }
+        JScrollPane enemyScrollPane = new JScrollPane(textArea);
+        enemyScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        enemyScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        enemyScrollPane.setPreferredSize(new Dimension(200, 100));
         JButton catchEnemyButton = new JButton("Catch Enemy");
 
         enemyActionsPanel.add(enemyScrollPane, BorderLayout.CENTER);
@@ -122,35 +138,35 @@ public class BattleGUI {
             public void actionPerformed(ActionEvent e) {
                 if (arena.catchMonster(player, enemy)) {
                     new DungeonGUI(frame);
+                    textArea = null;
                 }
-                ;
             }
         });
 
         basicAttackButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                player.getMonsters()[0].basicAttack(enemy);
+                textArea.append(player.getMonsters()[0].basicAttack(enemy, "Anda"));
                 updateGUI(player.getMonsters()[0], enemy);
             }
         });
 
         specialAttackButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                player.getMonsters()[0].specialAttack(enemy);
+                textArea.append(player.getMonsters()[0].specialAttack(enemy, "Anda"));
                 updateGUI(player.getMonsters()[0], enemy);
             }
         });
 
         elementAttackButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                player.getMonsters()[0].elementAttack(enemy);
+                textArea.append(player.getMonsters()[0].elementAttack(enemy, "Anda"));
                 updateGUI(player.getMonsters()[0], enemy);
             }
         });
 
-        monsterButton.addActionListener(new ActionListener() {
+        itemButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                new MonsterSelection(frame, "BattleGUI");
+                new ItemSelection(frame, "BattleGUI");
             }
         });
 
@@ -160,7 +176,16 @@ public class BattleGUI {
                 boolean run = arena.run(player.getMonsters()[0], enemy);
                 if (run) {
                     new DungeonGUI(frame);
+                } else {
+                    updateGUI(player.getMonsters()[0], enemy);
+                    textArea = null;
                 }
+            }
+        });
+
+        monsterButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new MonsterSelection(frame, "BattleGUI");
             }
         });
 
@@ -168,28 +193,43 @@ public class BattleGUI {
     }
 
     public void updateGUI(Monster player, Monster enemy) {
-        enemyHPLabel.setText("HP: " + enemy.getHp() + "/" + enemy.getMaxHP());
         if (!enemy.isAlive()) {
             BattleGUI.player.setEp(BattleGUI.player.getEp() + 100);
             new DungeonGUI(frame);
+            textArea = null;
+            return;
         }
         enemyAction();
         if (!player.isAlive()) {
-            // new DungeonGUI(frame);
+            int temp = 0;
+            for (int i = 0; i < Main.player.getMonsterSize(); i++) {
+                if (!Main.player.getMonsters()[i].isAlive()) {
+                    temp++;
+                }
+            }
+            if (temp == Main.player.getMonsterSize()) {
+                textArea = null;
+                new GameOver(frame);
+            } else {
+                new MonsterSelection(frame, "BattleGUI");
+            }
+            return;
         }
+
+        enemyHPLabel.setText("HP: " + enemy.getHp() + "/" + enemy.getMaxHP());
         playerHPLabel.setText("HP: " + player.getHp() + "/" + player.getMaxHP());
     }
 
     public void enemyAction() {
         switch ((int) (Math.random() * 3) + 1) {
             case 1:
-                enemy.basicAttack(player.getMonsters()[0]);
+                textArea.setText(textArea.getText() + enemy.basicAttack(player.getMonsters()[0], "Musuh"));
                 break;
             case 2:
-                enemy.specialAttack(player.getMonsters()[0]);
+                textArea.setText(textArea.getText() + enemy.specialAttack(player.getMonsters()[0], "Musuh"));
                 break;
             case 3:
-                enemy.elementAttack(player.getMonsters()[0]);
+                textArea.setText(textArea.getText() + enemy.elementAttack(player.getMonsters()[0], "Musuh"));
                 break;
         }
     }

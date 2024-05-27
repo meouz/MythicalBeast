@@ -22,7 +22,8 @@ public class Monster {
 
     Monster[] monster = new Monster[5];
 
-    public Monster(){}
+    public Monster() {
+    }
 
     public Monster(String name, Element element, int monsterStr, String image) {
         setName(name);
@@ -36,21 +37,21 @@ public class Monster {
         setEp(0);
     }
 
-    public String basicAttack(Monster target) {
+    public String basicAttack(Monster target, String entity) {
         target.setHp(target.getHp() - getMonsterStr());
-        return "Anda memberi damage: " + getMonsterStr(); // Selalu kena
+        return "\n" + entity + " memberi damage: " + getMonsterStr(); // Selalu kena
     }
 
-    public String specialAttack(Monster target) {
+    public String specialAttack(Monster target, String entity) {
         if (Math.random() > 0.9) {
-            return "Serangan Anda Miss";
+            return "\nSerangan " + entity + " Miss";
         }
         int dmg = getMonsterStr() + random();
         target.setHp(target.getHp() - dmg);
-        return "Anda memberi damage: " + dmg; // Sangat jarang untuk miss
+        return "\n" + entity + " memberi damage: " + dmg; // Sangat jarang untuk miss
     }
 
-    private int random(){
+    private int random() {
         return (int) Math.random() * 3 + 3;
     }
 
@@ -63,7 +64,7 @@ public class Monster {
         setEp(0);
     }
 
-    public String elementAttack(Monster target) {
+    public String elementAttack(Monster target, String entity) {
         int dmg;
         if (getElement() instanceof Api && target.getElement() instanceof Es) {
             dmg = element.damage(target);
@@ -79,8 +80,7 @@ public class Monster {
             dmg = element.getElementDmg();
         }
         target.setHp(target.getHp() - dmg);
-        System.out.println(target.getHp());
-        return "Anda memberi damage: " + dmg;
+        return "\n" + entity + " memberi damage: " + dmg;
     }
 
     public String getMonsterDetail() {
@@ -126,17 +126,13 @@ public class Monster {
     }
 
     public void setHp(int hp) {
-        this.hp = hp;
+        if (hp < 0) {
+            this.hp = 0;
+        } else {
+            this.hp = hp;
+        }
     }
 
-    public void heal(int amount) {
-        if (getHp() + amount > getMaxHP()) {
-            this.hp = getMaxHP();
-            return;
-        }
-        this.hp = getHp() + amount;
-    }
-    
     public int getEp() {
         return ep;
     }

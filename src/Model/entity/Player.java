@@ -8,7 +8,7 @@ public class Player {
     private Item[] items = new Item[3];
 
     public Player() {
-        this.ep = 0;
+        setEp(0);
     }
 
     public int getEp() {
@@ -24,6 +24,9 @@ public class Player {
     }
 
     public void setMonsters(Monster monster) {
+        if (monster == null) {
+            return;
+        }
         for (int i = 0; i < monsters.length; i++) {
             if (monsters[i] == null) {
                 monsters[i] = monster;
@@ -37,6 +40,9 @@ public class Player {
     }
 
     public void setItems(Item item) {
+        if (item == null) {
+            return;
+        }
         for (int i = 0; i < items.length; i++) {
             if (items[i] == null) {
                 this.items[i] = item;
@@ -56,7 +62,7 @@ public class Player {
     }
 
     public void changeMonster(int index) {
-        if (getMonsterSize() <= 1) {
+        if (monsters[index] == null || index < 0 || index > getMonsters().length) {
             return;
         }
         Monster tempMonster = monsters[0];

@@ -1,23 +1,24 @@
 package Model.item;
 
-import Model.entity.Monster;
-
-public abstract class Item {
+public class Item {
     private String name;
-    private int maxSum;
-    private int sum;
-    private int effect;
+    private int maxQty;
+    private int qty;
+    private int price;
+    private String imagePath;
 
-    public Item() {
-
+    public Item(String name, String imagePath, int qty, int maxQty, int price) {
+        setName(name);
+        setImagePath(imagePath);
+        setQty(qty);
+        setMaxQty(maxQty);
+        setPrice(price);
     }
 
-    public int getEffect() {
-        return effect;
-    }
-
-    public void setEffect(int effect) {
-        this.effect = effect;
+    public Item(String name, String imagePath, int price) {
+        setName(name);
+        setImagePath(imagePath);
+        setPrice(price);
     }
 
     public String getName() {
@@ -28,31 +29,35 @@ public abstract class Item {
         this.name = name;
     }
 
-    public int getMaxSum() {
-        return maxSum;
+    public int getMaxQty() {
+        return maxQty;
     }
 
-    public void setMaxSum(int maxSum) {
-        this.maxSum = maxSum;
+    public void setMaxQty(int maxQty) {
+        this.maxQty = maxQty;
     }
 
-    public int getSum() {
-        return sum;
+    public int getQty() {
+        return qty;
     }
 
-    public void setSum(int sum) {
-        this.sum = sum;
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
-    public void effect(Monster monster) {
-        monster.setHp(monster.getHp() + (monster.getMaxHP() * getEffect() / 100));
+    public int getPrice() {
+        return price;
     }
 
-    public String printDetail() {
-        String result;
-        result = "Nama : " + getName();
-        result += "\nJumlah : " + getSum() + "/" + getMaxSum();
-        result += "\nEffect : Heal " + getEffect() + "% dari Max HP";
-        return result;
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
