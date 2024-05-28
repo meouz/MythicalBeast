@@ -6,7 +6,7 @@ import Model.entity.Monster;
 import Model.entity.Player;
 
 public class HomeBase {
-    private static String[] monsterImages = Main.monsterImages;
+    private String[] monsterImages = Main.monsterImages;
 
     public HomeBase() {
     }

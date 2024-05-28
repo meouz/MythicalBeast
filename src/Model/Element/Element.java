@@ -7,7 +7,7 @@ import Model.entity.Monster;
 public abstract class Element implements Serializable{
     private int elementDmg;
 
-    public Element() {
+    Element() {
     }
 
     protected Element(int elementDmg) {
