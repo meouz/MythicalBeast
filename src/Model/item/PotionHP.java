@@ -5,8 +5,8 @@ import Model.entity.Monster;
 public class PotionHP extends Item {
     private int effect;
 
-    public PotionHP(String name, String imagePath, int qty, int maxQty, int price, int effect) {
-        super(name, imagePath, qty, maxQty, price);
+    public PotionHP(String name, String imagePath, int qty, int price, int effect) {
+        super(name, imagePath, qty, price);
         setEffect(effect);
     }
 

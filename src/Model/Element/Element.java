@@ -1,8 +1,10 @@
 package Model.element;
 
+import java.io.Serializable;
+
 import Model.entity.Monster;
 
-public abstract class Element {
+public abstract class Element implements Serializable{
     private int elementDmg;
 
     public Element() {

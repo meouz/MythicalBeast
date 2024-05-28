@@ -1,17 +1,18 @@
 package Model.item;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Serializable {
     private String name;
-    private int maxQty;
+    private int maxQty = 99;
     private int qty;
     private int price;
     private String imagePath;
 
-    public Item(String name, String imagePath, int qty, int maxQty, int price) {
+    public Item(String name, String imagePath, int qty, int price) {
         setName(name);
         setImagePath(imagePath);
         setQty(qty);
-        setMaxQty(maxQty);
         setPrice(price);
     }
 
@@ -19,6 +20,11 @@ public class Item {
         setName(name);
         setImagePath(imagePath);
         setPrice(price);
+    }
+
+    @Override
+    public String toString() {
+        return "Item{name=" + name + ", maxQty=" + maxQty + ", qty=" + qty + ", price=" + price + ", imagePath=" + imagePath +  "}";
     }
 
     public String getName() {
@@ -31,10 +37,6 @@ public class Item {
 
     public int getMaxQty() {
         return maxQty;
-    }
-
-    public void setMaxQty(int maxQty) {
-        this.maxQty = maxQty;
     }
 
     public int getQty() {

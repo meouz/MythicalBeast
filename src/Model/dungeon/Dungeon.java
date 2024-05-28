@@ -8,26 +8,16 @@ import Model.element.components.Tanah;
 import Model.entity.Monster;
 
 public class Dungeon {
-    private int floor;
+    private Monster player;
 
-    public Dungeon() {
-
-    }
-
-    public int getFloor() {
-        return floor;
-    }
-
-    public void setFloor(int floor) {
-        this.floor = floor;
+    public Dungeon(Monster player) {
+        this.player = player;
     }
 
     public String explore() {
-        String result = "Tidak menemukan apa-apa";
-        if (Math.random() > 0.8) {
-            result = "Bertemu pintu";
-        } else if (Math.random() > 0.65) {
-            result = "Bertemu monster";
+        String result = "\nTidak menemukan apa-apa";
+        if (Math.random() > 0.5) {
+            result = "\nBertemu monster";
         }
         return result;
     }
@@ -36,22 +26,22 @@ public class Dungeon {
         Monster enemy;
         switch ((int) (Math.random() * 5 + 1)) {
             case 1:
-                enemy = new Monster(null, new Tanah(), 10 + ((int) (Math.random() * 3 + 3) * floor), "src/resources/images/monsterTanah.jpg");
+                enemy = new Monster(0, new Tanah(), player.getMonsterStr() + ((int) (Math.random() * 3 + 3)), "src/resources/images/monsterTanah.jpg");
                 break;
             case 2:
-                enemy = new Monster(null, new Angin(), 10 + ((int) (Math.random() * 3 + 3) * floor), "src/resources/images/monsterAngin.jpg");
+                enemy = new Monster(1, new Angin(), player.getMonsterStr() + ((int) (Math.random() * 3 + 3)), "src/resources/images/monsterAngin.jpg");
                 break;
             case 3:
-                enemy = new Monster(null, new Air(), 10 + ((int) (Math.random() * 3 + 3) * floor), "src/resources/images/monsterAir.jpg");
+                enemy = new Monster(2, new Air(), player.getMonsterStr() + ((int) (Math.random() * 3 + 3)), "src/resources/images/monsterAir.jpg");
                 break;
             case 4:
-                enemy = new Monster(null, new Api(), 10 + ((int) (Math.random() * 3 + 3) * floor), "src/resources/images/monsterApi.jpg");
+                enemy = new Monster(3, new Api(), player.getMonsterStr() + ((int) (Math.random() * 3 + 3)), "src/resources/images/monsterApi.jpg");
                 break;
             case 5:
-                enemy = new Monster(null, new Es(), 10 + ((int) (Math.random() * 3 + 3) * floor), "src/resources/images/monsterEs.jpg");
+                enemy = new Monster(4, new Es(), player.getMonsterStr() + ((int) (Math.random() * 3 + 3)), "src/resources/images/monsterEs.jpg");
                 break;
             default:
-                enemy = new Monster(null, new Tanah(), 10 + ((int) (Math.random() * 3 + 3) * floor), "src/resources/images/monsterTanah.jpg");
+                enemy = new Monster(0, new Tanah(), player.getMonsterStr() + ((int) (Math.random() * 3 + 3)), "src/resources/images/monsterTanah.jpg");
                 break;
         }
         return enemy;

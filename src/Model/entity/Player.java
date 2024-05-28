@@ -1,28 +1,29 @@
 package Model.entity;
 
-import Model.item.Item;
+import java.io.Serializable;
+import java.util.Arrays;
 
-public class Player {
+import Model.item.Item;
+import Model.item.PotionHP;
+
+public class Player implements Serializable {
     private int ep;
     private Monster[] monsters = new Monster[3];
-    private Item[] items = new Item[3];
+    private Item[] items = {
+            new PotionHP("Small Heal Potion", "src/resources/images/HealSmall.jpg", 2, 10, 10),
+            new PotionHP("Medium Heal Potion", "src/resources/images/HealMedium.jpg", 0, 40, 50),
+            new PotionHP("Large Heal Potion", "src/resources/images/HealLarge.jpg", 0, 100, 100),
+    };
 
     public Player() {
         setEp(0);
-    }
-
-    public int getEp() {
-        return ep;
-    }
-
-    public void setEp(int ep) {
-        this.ep = ep;
     }
 
     public Monster[] getMonsters() {
         return monsters;
     }
 
+    // Overloading
     public void setMonsters(Monster monster) {
         if (monster == null) {
             return;
@@ -35,10 +36,19 @@ public class Player {
         }
     }
 
+    // Overloading
+    public void setMonsters(Monster[] monsters) {
+        if (monsters == null) {
+            return;
+        }
+        this.monsters = monsters;
+    }
+
     public Item[] getItems() {
         return items;
     }
 
+    // Overloading
     public void setItems(Item item) {
         if (item == null) {
             return;
@@ -49,6 +59,14 @@ public class Player {
                 break;
             }
         }
+    }
+
+    // Overloading
+    public void setItems(Item[] items) {
+        if (items == null) {
+            return;
+        }
+        this.items = items;
     }
 
     public int getMonsterSize() {
@@ -68,5 +86,18 @@ public class Player {
         Monster tempMonster = monsters[0];
         monsters[0] = monsters[index];
         monsters[index] = tempMonster;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{ep=" + ep + Arrays.toString(monsters) + ", items=" + Arrays.toString(items) + "}";
+    }
+
+    public int getEp() {
+        return ep;
+    }
+
+    public void setEp(int ep) {
+        this.ep = ep;
     }
 }

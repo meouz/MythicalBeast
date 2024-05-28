@@ -23,11 +23,10 @@ public class HomeBase {
     }
 
     public void evolve(Monster monster, int index) {
-        if (monster.getLevel() <= monster.getLastLevel()) {
+        if (monster == null || monster.getLevel() <= monster.getLastLevel()) {
             return;
         }
         if (monster.getElement() instanceof Api) {
-            // Bisa Angin / Tanah
             switch (index) {
                 case 1:
                     monster.setElement(new Angin());
@@ -39,7 +38,6 @@ public class HomeBase {
                     break;
             }
         } else if (monster.getElement() instanceof Es) {
-            // Bisa Tanah / Air
             switch (index) {
                 case 1:
                     monster.setElement(new Tanah());
@@ -51,7 +49,6 @@ public class HomeBase {
                     break;
             }
         } else if (monster.getElement() instanceof Angin) {
-            // Bisa Api / Air
             switch (index) {
                 case 1:
                     monster.setElement(new Air());
@@ -63,7 +60,6 @@ public class HomeBase {
                     break;
             }
         } else if (monster.getElement() instanceof Tanah) {
-            // Bisa Api / Es
             switch (index) {
                 case 1:
                     monster.setElement(new Api());
@@ -75,7 +71,6 @@ public class HomeBase {
                     break;
             }
         } else if (monster.getElement() instanceof Air) {
-            // Bisa Es / Angin
             switch (index) {
                 case 1:
                     monster.setElement(new Es());
@@ -93,19 +88,14 @@ public class HomeBase {
     public String getElementEvolve(Monster monster) {
         if (monster.getElement() instanceof Api) {
             return "Angin-Tanah";
-            // Bisa Angin / Tanah
         } else if (monster.getElement() instanceof Es) {
             return "Tanah-Air";
-            // Bisa Tanah / Air
         } else if (monster.getElement() instanceof Angin) {
             return "Air-Api";
-            // Bisa Air / Api
         } else if (monster.getElement() instanceof Tanah) {
             return "Api-Es";
-            // Bisa Api / Es
         } else if (monster.getElement() instanceof Air) {
             return "Es-Angin";
-            // Bisa Es / Angin
         }
         return null;
     }

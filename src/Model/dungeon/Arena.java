@@ -4,9 +4,12 @@ import Model.entity.Monster;
 import Model.entity.Player;
 
 public class Arena implements Battle {
+	private Player player;
+	private Monster enemy;
 
-	public Arena() {
-		
+	public Arena(Player player, Monster enemy) {
+		this.player = player;
+		this.enemy = enemy;
 	}
 
 	@Override
@@ -18,15 +21,15 @@ public class Arena implements Battle {
 		return str;
 	}
 
-	public boolean run(Monster player, Monster enemy) {
-		int reducedLevel = player.getLevel() - enemy.getLevel();
+	public boolean run() {
+		int reducedLevel = player.getMonsters()[0].getLevel() - enemy.getLevel();
 		if ((Math.random() * 10) + reducedLevel >= 8) {
 			return true;
 		}
 		return false;
 	}
 
-	public boolean catchMonster(Player player, Monster enemy) {
+	public boolean catchMonster() {
 		if (player.getMonsterSize() < 3 && enemy.getHp() < (enemy.getMaxHP() * 0.20)) {
 			player.getMonsters()[player.getMonsterSize()] = enemy;
 			return true;

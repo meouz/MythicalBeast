@@ -9,34 +9,30 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import Model.Main;
+import Model.dungeon.Dungeon;
+
 public class DungeonGUI {
     private static JTextArea textArea;
+    private Dungeon dungeon = new Dungeon(Main.player.getMonsters()[0]);
+    private JButton monsterButton, homeBaseButton, itemButton, exploreButton;
 
     public DungeonGUI(JFrame frame) {
-        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.getContentPane().removeAll();
 
-        // Create the main panel
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        // Create the buttons
-        JButton monsterButton = new JButton("Monster");
-        JButton homeBaseButton = new JButton("Home Base");
-        JButton itemButton = new JButton("Item");
-        JButton exploreButton = new JButton("Explore");
-
-        // Create a panel for the top buttons
+        monsterButton = new JButton("Monster");
+        homeBaseButton = new JButton("Home Base");
+        itemButton = new JButton("Item");
+        exploreButton = new JButton("Explore");
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(monsterButton, BorderLayout.WEST);
         topPanel.add(homeBaseButton, BorderLayout.CENTER);
         topPanel.add(itemButton, BorderLayout.EAST);
 
-        // Create a panel for the bottom button
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.add(exploreButton, BorderLayout.CENTER);
-
-        // Create the text area
         if (textArea == null) {
             Font font = new Font("Arial", Font.PLAIN, 30);
             textArea = new JTextArea();
@@ -45,46 +41,37 @@ public class DungeonGUI {
         }
         textArea.setEditable(false);
 
-        // Add components to the main panel
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(new JScrollPane(textArea), BorderLayout.CENTER);
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
-        // Add the main panel to the frame
         frame.add(mainPanel);
         frame.setVisible(true);
 
         monsterButton.addActionListener(e -> {
             frame.getContentPane().removeAll();
-            new MonsterSelection(frame, "Dungeon");
+            new MonsterGUI(frame, "Dungeon");
         });
 
         homeBaseButton.addActionListener(e -> {
             frame.getContentPane().removeAll();
-            new Homebase(frame);
+            new HomeBaseGUI(frame);
             textArea = null;
         });
 
         itemButton.addActionListener(e -> {
             frame.getContentPane().removeAll();
-            new ItemSelection(frame, "Dungeon");
+            new ItemGUI(frame, "Dungeon");
         });
 
         exploreButton.addActionListener(e -> {
             textArea.setText(textArea.getText() + "\nExploring...");
-            if (Math.random() < 0.5) {
-                textArea.setText(textArea.getText() + "\nAnda menemukan Musuh");
+            String result = dungeon.explore();
+            textArea.append(result);
+            if (result.equalsIgnoreCase("\nbertemu monster")) {
                 frame.getContentPane().removeAll();
                 new BattleGUI(frame);
-            } else {
-                textArea.setText(textArea.getText() + "\nAnda tidak menemukan Musuh");
             }
         });
     }
-
-    // public static void main(String[] args) {
-    // SwingUtilities.invokeLater(() -> {
-    // DungeonInterface frame = new DungeonInterface();
-    // });
-    // }
 }

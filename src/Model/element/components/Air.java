@@ -6,14 +6,14 @@ import Model.entity.Monster;
 public class Air extends Element {
 
     public Air() {
-        super(15);
+        super(12);
     }
 
     @Override
     public int damage(Monster monster) {
         int damage = getElementDmg();
         if (monster.getElement() instanceof Api)
-            damage *= 2; // Elemental Attack
+            damage *= 2;
         return damage;
     }
 }

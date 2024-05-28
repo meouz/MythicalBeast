@@ -1,5 +1,7 @@
 package Model.entity;
 
+import java.io.Serializable;
+
 import Model.element.Element;
 import Model.element.components.Air;
 import Model.element.components.Angin;
@@ -7,7 +9,8 @@ import Model.element.components.Api;
 import Model.element.components.Es;
 import Model.element.components.Tanah;
 
-public class Monster {
+public class Monster implements Serializable {
+    private String[] names = {"Blazetalon", "Aerozephyr", "Hydroblast", "Frostbite", "Stonelash"};
     private String name;
     private int monsterStr;
     private Element element;
@@ -20,13 +23,11 @@ public class Monster {
     private int ep;
     private String image;
 
-    Monster[] monster = new Monster[5];
-
     public Monster() {
     }
 
-    public Monster(String name, Element element, int monsterStr, String image) {
-        setName(name);
+    public Monster(int name, Element element, int monsterStr, String image) {
+        setName(names[name]);
         setElement(element);
         setMonsterStr(monsterStr);
         setImage(image);
@@ -39,7 +40,7 @@ public class Monster {
 
     public String basicAttack(Monster target, String entity) {
         target.setHp(target.getHp() - getMonsterStr());
-        return "\n" + entity + " memberi damage: " + getMonsterStr(); // Selalu kena
+        return "\n" + entity + " memberi damage: " + getMonsterStr();
     }
 
     public String specialAttack(Monster target, String entity) {
@@ -48,7 +49,7 @@ public class Monster {
         }
         int dmg = getMonsterStr() + random();
         target.setHp(target.getHp() - dmg);
-        return "\n" + entity + " memberi damage: " + dmg; // Sangat jarang untuk miss
+        return "\n" + entity + " memberi damage: " + dmg;
     }
 
     private int random() {
@@ -58,8 +59,8 @@ public class Monster {
     public void levelUp() {
         setMaxHP(random() + getMaxHP() + 10);
         setHp(getMaxHP());
-        setMonsterStr(random() + getMonsterStr() + 10);
-        getElement().setElementDmg(random() + getElement().getElementDmg() + 10);
+        setMonsterStr(getMonsterStr() + (int) (random() * 1.5));
+        getElement().setElementDmg(getElement().getElementDmg() + (int) (random() * 1.5));
         setLevel(getLevel() + 1);
         setEp(0);
     }
@@ -91,6 +92,13 @@ public class Monster {
         result += "<br>EP : " + getEp() + "/" + getMaxEP();
         result += "</html>";
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Monster{name=" + name + ", monsterStr=" + monsterStr + ", Element=" + element + ", maxHP=" + maxHP
+                + ", hp=" + hp + ", maxLevel=" + maxLevel + ", level=" + level + ", lastLevel=" + lastLevel + ", maxEP="
+                + maxEP + ", ep=" + ep + ", image=" + image + "}";
     }
 
     public boolean isAlive() {
