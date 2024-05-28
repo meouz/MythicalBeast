@@ -7,15 +7,17 @@ import Model.entity.Player;
 
 public class HomeBase {
     private String[] monsterImages = Main.monsterImages;
+    private Player player;
 
-    public HomeBase() {
+    public HomeBase(Player player) {
+        this.player = player;
     }
 
     public void revive(Monster monster) {
         monster.setHp(monster.getMaxHP());
     }
 
-    public void train(Player player, Monster monster) {
+    public void train(Monster monster) {
         if (player.getEp() >= monster.getMaxEP()) {
             monster.levelUp();
             player.setEp(player.getEp() - monster.getMaxEP());
