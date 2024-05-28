@@ -25,6 +25,7 @@ public class MonsterGUI {
     public JFrame jframe;
     private String current;
     public Player player = Main.player;
+    private HomeBase homeBase = new HomeBase(player);
     private JButton trainButton, evolveButton, reviveButton, mainMonsterButton;
 
     public MonsterGUI(JFrame frame, String current) {
@@ -115,8 +116,7 @@ public class MonsterGUI {
 
             reviveButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    HomeBase home = new HomeBase();
-                    home.revive(player.getMonsters()[index]);
+                    homeBase.revive(player.getMonsters()[index]);
                     new MonsterGUI(jframe, current);
                 }
             });
@@ -130,13 +130,13 @@ public class MonsterGUI {
 
             trainButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    showTrainDetail(jframe, index, player);
+                    showTrainDetail(jframe, index, player, homeBase);
                 }
             });
 
             evolveButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    showEvolveDetail(jframe, index, player);
+                    showEvolveDetail(jframe, index, player, homeBase);
                     new MonsterGUI(jframe, current);
                 }
             });
@@ -179,29 +179,27 @@ public class MonsterGUI {
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private static void showTrainDetail(JFrame frame, int index, Player player) {
+    private static void showTrainDetail(JFrame frame, int index, Player player, HomeBase homeBase) {
         JLabel label = new JLabel("<html>EP: " + player.getEp() + "<br>EP yang dibutuhkan:"
                 + player.getMonsters()[index].getMaxEP() + "</html>");
         int result = JOptionPane.showConfirmDialog(frame, new Object[] { label }, "Train Monster",
                 JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
-        if (result == JOptionPane.YES_OPTION && player.getEp() >= player.getMonsters()[index].getMaxEP()) {
-            player.getMonsters()[index].levelUp();
-            player.setEp(player.getEp() - player.getMonsters()[index].getMaxEP());
+        if (result == JOptionPane.YES_OPTION) {
+            homeBase.train(player.getMonsters()[index]);
         }
     }
 
-    private static void showEvolveDetail(JFrame frame, int index, Player player) {
+    private static void showEvolveDetail(JFrame frame, int index, Player player, HomeBase homeBase) {
         String message = "<html>Element: " + player.getMonsters()[index].getElement().getClass().getSimpleName()
                 + "</html>";
-        HomeBase home = new HomeBase();
-        String option = home.getElementEvolve(player.getMonsters()[index]) + "-Cancel";
+        String option = homeBase.getElementEvolve(player.getMonsters()[index]) + "-Cancel";
         String[] options = option.split("-");
         int result = showCustomButtonDialog("Evolve Monster", message, options);
 
         if (result == JOptionPane.YES_OPTION) {
-            home.evolve(player.getMonsters()[index], 1);
+            homeBase.evolve(player.getMonsters()[index], 1);
         } else if (result == JOptionPane.NO_OPTION) {
-            home.evolve(player.getMonsters()[index], 2);
+            homeBase.evolve(player.getMonsters()[index], 2);
         }
     }
 
