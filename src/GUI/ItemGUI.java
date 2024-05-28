@@ -23,11 +23,11 @@ import Model.item.Item;
 import Model.item.PotionHP;
 
 public class ItemGUI {
-    public JFrame jframe;
+    public JFrame frame;
     private String current;
-    private static Player player = Main.player;
+    private Player player;
     private JButton buyButton;
-    private static Item[] items = Main.items;
+    private Item[] items = Main.items;
 
     public ItemGUI(JFrame frame, String current) {
         this.current = current;
@@ -35,7 +35,8 @@ public class ItemGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLayout(new BorderLayout());
-        jframe = frame;
+        this.frame = frame;
+        player = Main.player;
 
         JPanel itemPanel = new JPanel();
         itemPanel.setLayout(new BorderLayout());
@@ -107,7 +108,7 @@ public class ItemGUI {
             panel.add(buyButton, BorderLayout.NORTH);
             buyButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    showBuyDetail(jframe, index);
+                    showBuyDetail(frame, index, player, items);
                 }
             });
         }
@@ -122,7 +123,7 @@ public class ItemGUI {
 
         infoButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                showInfo(jframe, index);
+                showInfo(frame, index, player);
             }
         });
 
@@ -147,13 +148,13 @@ public class ItemGUI {
         return button;
     }
 
-    private static void showInfo(JFrame frame, int index) {
+    private static void showInfo(JFrame frame, int index, Player player) {
         JLabel label = new JLabel(((PotionHP) player.getItems()[index]).printDetail());
         JOptionPane.showConfirmDialog(frame, new Object[] { label }, "Potion Status",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private static void showBuyDetail(JFrame frame, int index) {
+    private static void showBuyDetail(JFrame frame, int index, Player player, Item[] items) {
         String message = "<html>Price: " + items[index].getPrice() + "<br>EP: " + player.getEp() + "<br>Have: "
                 + player.getItems()[index].getQty() + "</html>";
         String option = "Buy-Cancel";

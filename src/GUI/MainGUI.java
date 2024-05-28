@@ -30,7 +30,7 @@ public class MainGUI extends JFrame {
     public JPanel buttonPanel;
     private JLabel messageLabel;
     private JLayeredPane layeredPane;
-    public static JFrame frame;
+    public JFrame frame;
     private GameData gameData = new GameData("Save Game ");
 
     public MainGUI(JFrame frame) {

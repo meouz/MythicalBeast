@@ -24,9 +24,9 @@ import Model.entity.Player;
 import Model.dungeon.Dungeon;
 
 public class BattleGUI {
-    private static Player player = Main.player;
-    private static Dungeon dungeon = new Dungeon(player.getMonsters()[0]);
-    private static Monster enemy = dungeon.genMonster();
+    private Player player = Main.player;
+    private Dungeon dungeon = new Dungeon(player.getMonsters()[0]);
+    private Monster enemy = dungeon.genMonster();
     private Arena arena = new Arena(player, enemy);
     private static JTextArea textArea;
     private JFrame frame;
@@ -171,6 +171,8 @@ public class BattleGUI {
                 if (arena.catchMonster()) {
                     new DungeonGUI(frame);
                     textArea = null;
+                } else {
+                    updateGUI(player.getMonsters()[0], enemy);
                 }
             }
         });
@@ -180,7 +182,7 @@ public class BattleGUI {
 
     public void updateGUI(Monster player, Monster enemy) {
         if (!enemy.isAlive()) {
-            BattleGUI.player.setEp(BattleGUI.player.getEp() + 100);
+            this.player.setEp(this.player.getEp() + 100);
             new DungeonGUI(frame);
             textArea = null;
             return;

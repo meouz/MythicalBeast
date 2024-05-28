@@ -26,7 +26,6 @@ public class HomeBaseGUI {
     private JPanel imagePanel;
     private JPanel centerPanel;
     private CardLayout cardLayout;
-
     private JButton dungeonButton, monsterButton, itemButton, gameDataButton, exitButton;
 
     public HomeBaseGUI(JFrame frame) {

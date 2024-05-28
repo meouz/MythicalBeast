@@ -13,7 +13,7 @@ import Model.entity.Player;
 import Model.gamedata.GameData;
 
 public class GameDataGUI {
-    private static Player player = Main.player;
+    private Player player;
     private GameData gameData = new GameData("Save Game ");
     JButton saveButton1, saveButton2, saveButton3, loadButton1, loadButton2, loadButton3, backButton;
 
@@ -21,6 +21,7 @@ public class GameDataGUI {
         frame.getContentPane().removeAll();
         frame.getContentPane().repaint();
         frame.getContentPane().setBackground(Color.BLACK);
+        player = Main.player;
 
         saveButton1 = createSaveButton("Save Game 1", "1.txt");
         saveButton2 = createSaveButton("Save Game 2", "2.txt");

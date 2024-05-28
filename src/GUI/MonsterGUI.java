@@ -24,7 +24,7 @@ import Model.homebase.HomeBase;
 public class MonsterGUI {
     public JFrame jframe;
     private String current;
-    public static Player player = Main.player;
+    public Player player = Main.player;
     private JButton trainButton, evolveButton, reviveButton, mainMonsterButton;
 
     public MonsterGUI(JFrame frame, String current) {
@@ -130,13 +130,13 @@ public class MonsterGUI {
 
             trainButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    showTrainDetail(jframe, index);
+                    showTrainDetail(jframe, index, player);
                 }
             });
 
             evolveButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    showEvolveDetail(jframe, index);
+                    showEvolveDetail(jframe, index, player);
                     new MonsterGUI(jframe, current);
                 }
             });
@@ -151,7 +151,7 @@ public class MonsterGUI {
 
         statButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                showStats(jframe, index);
+                showStats(jframe, index, player);
             }
         });
 
@@ -173,13 +173,13 @@ public class MonsterGUI {
         return button;
     }
 
-    private static void showStats(JFrame frame, int index) {
+    private static void showStats(JFrame frame, int index, Player player) {
         JLabel label = new JLabel(player.getMonsters()[index].getMonsterDetail());
         JOptionPane.showConfirmDialog(frame, new Object[] { label }, "Monster Status",
                 JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private static void showTrainDetail(JFrame frame, int index) {
+    private static void showTrainDetail(JFrame frame, int index, Player player) {
         JLabel label = new JLabel("<html>EP: " + player.getEp() + "<br>EP yang dibutuhkan:"
                 + player.getMonsters()[index].getMaxEP() + "</html>");
         int result = JOptionPane.showConfirmDialog(frame, new Object[] { label }, "Train Monster",
@@ -190,7 +190,7 @@ public class MonsterGUI {
         }
     }
 
-    private static void showEvolveDetail(JFrame frame, int index) {
+    private static void showEvolveDetail(JFrame frame, int index, Player player) {
         String message = "<html>Element: " + player.getMonsters()[index].getElement().getClass().getSimpleName()
                 + "</html>";
         HomeBase home = new HomeBase();
