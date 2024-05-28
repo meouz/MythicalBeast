@@ -148,10 +148,7 @@ public class MainGUI extends JFrame {
         JButton backButton = createButton("Back");
 
         loadGame1.addActionListener(e -> {
-            if (
-                
-                gameData.loadGame("1.txt")
-            ) {
+            if (gameData.loadGame("1.txt")) {
                 buttonPanel.removeAll();
                 buttonPanel.repaint();
                 new HomeBaseGUI(this);

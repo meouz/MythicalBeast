@@ -30,19 +30,19 @@ public class GameData {
     }
 
     public boolean loadGame(String eFile) {
+        // Main.player = null;
         try {
             FileInputStream fileIn = new FileInputStream("client/" + filePath + eFile);
             ObjectInputStream in = new ObjectInputStream(fileIn);
-            // Main.player = (Player) in.readObject();
-            Main.player = null;
+            Main.player = (Player) in.readObject();
             System.out.println("Game loaded successfully.");
             in.close();
             return true;
         } catch (IOException i) {
             ExceptionHandler.Error(i);
-        // } catch (ClassNotFoundException c) {
-        //     System.out.println("GameState class not found.");
-        //     c.printStackTrace();
+        } catch (ClassNotFoundException c) {
+            System.out.println("GameState class not found.");
+            c.printStackTrace();
         }
         return false;
     }

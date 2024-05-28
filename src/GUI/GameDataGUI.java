@@ -1,6 +1,5 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,15 +21,12 @@ public class GameDataGUI {
         frame.getContentPane().removeAll();
         frame.getContentPane().repaint();
         frame.getContentPane().setBackground(Color.BLACK);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setLayout(new BorderLayout());
 
         saveButton1 = createSaveButton("Save Game 1", "1.txt");
-        loadButton1 = createLoadButton("Load Game 1", "1.txt");
         saveButton2 = createSaveButton("Save Game 2", "2.txt");
-        loadButton2 = createLoadButton("Load Game 2", "2.txt");
         saveButton3 = createSaveButton("Save Game 3", "3.txt");
+        loadButton1 = createLoadButton("Load Game 1", "1.txt");
+        loadButton2 = createLoadButton("Load Game 2", "2.txt");
         loadButton3 = createLoadButton("Load Game 3", "3.txt");
         backButton = new JButton("Back");
 
@@ -78,7 +74,7 @@ public class GameDataGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 gameData.saveGame(player, eFile);
-                JOptionPane.showConfirmDialog(null, "Data saved: " + name, eFile,
+                JOptionPane.showConfirmDialog(null, "Data saved: " + "Save Game " + eFile, "Save Game",
                         JOptionPane.CLOSED_OPTION);
             }
         });
@@ -90,8 +86,8 @@ public class GameDataGUI {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (gameData.loadGame(eFile)) {
-                    JOptionPane.showConfirmDialog(null, "Data loaded: " + name, eFile,
+                if (gameData.loadGame("1.txt")) {
+                    JOptionPane.showConfirmDialog(null, "Data loaded: " + "Load Game " + eFile, "Load Game",
                             JOptionPane.CLOSED_OPTION);
                 }
             }

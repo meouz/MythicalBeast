@@ -11,7 +11,8 @@ import Model.item.PotionHP;
 import Model.element.Element;
 
 public class Main {
-    public static Player player;
+    public static Player player = new Player();
+    public static Element[] element = { new Api(), new Angin(), new Air(), new Es(), new Tanah() };
     public static String[] monsterImages = {
             "src/resources/images/monsterApi.jpg",
             "src/resources/images/monsterAngin.jpg",
@@ -25,11 +26,7 @@ public class Main {
             new PotionHP("Large Heal Potion", "src/resources/images/HealLarge.jpg", 100, 100)
     };
 
-    public static Element[] element = { new Api(), new Angin(), new Air(), new Es(), new Tanah() };
-
     public static void main(String[] args) {
-        player = new Player();
-
         int random = (int) (Math.random() * 5);
         player.setMonsters(new Monster(random, element[random], 7, monsterImages[random]));
 
