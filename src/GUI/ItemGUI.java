@@ -129,12 +129,7 @@ public class ItemGUI {
 
         useButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (player.getItems()[index].getQty() <= 0
-                        || player.getMonsters()[0].getHp() == player.getMonsters()[0].getMaxHP()) {
-                    return;
-                }
-                player.getItems()[index].setQty(player.getItems()[index].getQty() - 1);
-                ((PotionHP) player.getItems()[index]).effect(player.getMonsters()[0]);
+                player.usePotion(player.getMonsters()[0], index);
             }
         });
         return panel;

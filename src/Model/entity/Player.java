@@ -88,9 +88,12 @@ public class Player implements Serializable {
         monsters[index] = tempMonster;
     }
 
-    @Override
-    public String toString() {
-        return "Player{ep=" + ep + Arrays.toString(monsters) + ", items=" + Arrays.toString(items) + "}";
+    public void usePotion(Monster monster, int index) {
+        if (getItems()[index].getQty() <= 0 || monster.getHp() == monster.getMaxHP()) {
+            return;
+        }
+        getItems()[index].setQty(getItems()[index].getQty() - 1);
+        ((PotionHP) getItems()[index]).effect(monster);
     }
 
     public int getEp() {
@@ -99,5 +102,10 @@ public class Player implements Serializable {
 
     public void setEp(int ep) {
         this.ep = ep;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{ep=" + ep + Arrays.toString(monsters) + ", items=" + Arrays.toString(items) + "}";
     }
 }
